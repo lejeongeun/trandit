@@ -1,23 +1,32 @@
 package org.project.trandit.domain.offer;
 
 import jakarta.persistence.*;
-import org.project.trandit.domain.carrier.Carrier;
+import lombok.*;
 import org.project.trandit.domain.common.BaseTimeEntity;
-import org.project.trandit.domain.request.TransportRequest;
+import org.project.trandit.domain.member.Member;
+import org.project.trandit.domain.request.Request;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PriceOffer extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int proposedPrice;
+
+    private int price; // 제안 가격
+    private String message; // 추가 메세지
+
     @Enumerated(EnumType.STRING)
-    private OfferStatus status;
+    private OfferStatus status; // 제안 상태(대기, 승인, 거절)
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
-    private TransportRequest request;
+    private Request request; // 대상 운송 요청
 
-    @ManyToOne
-    @JoinColumn(name = "carrier_id")
-    private Carrier carrier;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "trucker_id")
+    private Member trucker; // 제안한 화물주
 }

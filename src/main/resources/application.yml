@@ -8,6 +8,12 @@ spring:
     password: 1234
     driver-class-name: org.postgresql.Driver
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 5000
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -15,3 +21,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: "eW91ci1qd3Qtc2VjcmV0LWp3dC1zZWNyZXQta2V5"
+  access-token-expiration: 1800000 # 30?
+  refresh-token-expiration: 1209600000 # 14?
