@@ -1,20 +1,23 @@
 package org.project.trandit.auth.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.project.trandit.auth.dto.LoginRequestDto;
 import org.project.trandit.auth.dto.RefreshTokenRequestDto;
-import org.project.trandit.auth.dto.TokenResponseDto;
 import org.project.trandit.auth.dto.RegisterRequestDto;
 import org.project.trandit.auth.service.AuthService;
-import org.project.trandit.auth.service.RefreshTokenService;
+import org.project.trandit.auth.service.RedisService;
+import org.project.trandit.domain.member.Member;
 import org.project.trandit.global.exception.JwtValidationException;
 import org.project.trandit.security.CustomUserDetails;
 import org.project.trandit.security.JwtTokenProvider;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +32,8 @@ import java.util.Map;
 public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthService authService;
-    private final RefreshTokenService refreshTokenService;
+    private final RedisService redisService;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegisterRequestDto request){
@@ -39,32 +43,34 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto request,
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequestDto request,
                                                   HttpServletResponse response){
-        TokenResponseDto responseDto = authService.login(request);
-        // 플랫폼 분기 처리
-        if ("CUSTOMER".equalsIgnoreCase(responseDto.getRole())){
-            return ResponseEntity.ok(responseDto);
-        }else {
-            ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", responseDto.getAccessToken())
-                    .httpOnly(true)
-                    .secure(false) // 배포 시 true
-                    .path("/")
-                    .maxAge(30 * 60) // 30분
-                    .sameSite("Lax") // CSRF 방지
-                    .build();
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
+        Member member = ((CustomUserDetails) authentication.getPrincipal()).getMember();
+
+        String accessToken = jwtTokenProvider.createAccessToken(member.getEmail(), member.getRole().name());
+        String refreshToken = jwtTokenProvider.createRefreshToken(member.getEmail());
+
+        redisService.save(member.getEmail(), refreshToken, jwtTokenProvider.getRefreshTokenValidity());
+
+        if (!"CUSTOMER".equalsIgnoreCase(member.getRole().name())) {
+            ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                    .httpOnly(true)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(30 * 60)
+                    .sameSite("Lax")
+                    .build();
             response.addHeader("Set-Cookie", accessTokenCookie.toString());
-            // refreshToken과 role은 json형식으로 반환 (accessToken은 쿠키로)
-            return ResponseEntity.ok(Map.of(
-                    "refreshToken", responseDto.getRefreshToken(),
-                    "role", responseDto.getRole()
-            ));
         }
+        return ResponseEntity.ok(Map.of("accessToken", accessToken));
 
     }
+
     @PostMapping("/refresh")
-    public ResponseEntity<TokenResponseDto> refreshToken(@RequestBody RefreshTokenRequestDto request,
+    public ResponseEntity<Map<String, String>> refreshToken(@RequestBody RefreshTokenRequestDto request,
                                                          HttpServletResponse response){
         String refreshToken = request.getRefreshToken();
 
@@ -75,16 +81,16 @@ public class AuthController {
 
         // RefreshToken에서 이메일 추출
         String email = jwtTokenProvider.getEmailFromToken(refreshToken);
+        String role = jwtTokenProvider.getRoleFromToken(refreshToken);
 
         // Redis에서 저장된 RefreshToken 조회
-        String storedRefreshToken = refreshTokenService.get(refreshTokenService.buildKey(email));
+        String storedRefreshToken = redisService.get(redisService.buildKey(email));
         if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)){
             throw new JwtValidationException("저장된 Refresh Token과 일치하지 않습니다.");
         }
 
         // AccessToken 새 발급
         String newAccessToken = jwtTokenProvider.createAccessTokenFromRefreshToken(refreshToken);
-        String role = jwtTokenProvider.getRoleFromToken(refreshToken);
 
         // 토큰 재발급 후
         if (!"CUSTOMER".equalsIgnoreCase(role)){
@@ -98,18 +104,19 @@ public class AuthController {
             response.addHeader("Set-Cookie", newAccessTokenCookie.toString());
         }
 
-        return ResponseEntity.ok(new TokenResponseDto(
-                newAccessToken,
-                refreshToken,
-                role
-        ));
+        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Map<String, String>> logout(@AuthenticationPrincipal CustomUserDetails userDetails,
                                                       HttpServletResponse response){
+        if (userDetails == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "인증 정보가 없습니다."));
+        }
+
         String email = userDetails.getMember().getEmail();
-        refreshTokenService.delete(refreshTokenService.buildKey(email));
+        redisService.delete(redisService.buildKey(email));
+
         ResponseCookie deleteCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
                 .secure(false)
@@ -117,10 +124,11 @@ public class AuthController {
                 .maxAge(0)
                 .sameSite("Lax")
                 .build();
-
         response.addHeader("Set-Cookie",deleteCookie.toString());
-        return ResponseEntity.ok(Map.of("message", "로그아웃 되었습니다."));
 
+        return ResponseEntity.ok(Map.of("message", "로그아웃 되었습니다."));
     }
+
+
 
 }
