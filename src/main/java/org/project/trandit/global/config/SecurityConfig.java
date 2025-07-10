@@ -36,11 +36,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ CORS 설정 명시적으로 적용
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/auth/**",
+                                "/api/auth/register",   // ✅ 회원가입 허용
+                                "/api/auth/login",    // ✅ 로그인 허용
+                                "/api/auth/refresh",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()

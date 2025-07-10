@@ -3,6 +3,7 @@ package org.project.trandit.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
@@ -13,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Base64;
 import java.util.Date;
 
@@ -24,32 +25,34 @@ public class JwtTokenProvider {
     private final CustomUserDetailsService userDetailsService;
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secret;
 
-    @Value("${jwt.access-token-validity}")
+    @Value("${jwt.access-token-expiration}")
     private long accessTokenValidity;
 
-    @Value("${jwt.refresh-token-validity}")
+    @Value("${jwt.refresh-token-expiration}")
     private long refreshTokenValidity;
 
-    private Key key; // Jwt 서명을 위한 Key 객체
+    private SecretKey secretKey; // Jwt 서명을 위한 Key 객체
 
     @PostConstruct
     protected void init(){
-        byte[] keyBytes = Base64.getEncoder().encode(secretKey.getBytes());
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        byte[] keyBytes = Base64.getEncoder().encode(secret.getBytes());
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
     }
+
     public String createAccessToken(String email, String role){
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("role", role);
 
         Date now = new Date();
         Date expiry = new Date(now.getTime() + refreshTokenValidity);
+
         return Jwts.builder()
-                .setClaims(claims) // payload
-                .setIssuedAt(now)// 발급 시각
+                .setClaims(claims) //payload
+                .setIssuedAt(now) // 발급 시각
                 .setExpiration(expiry) // 만료 시각
-                .signWith(key, SignatureAlgorithm.HS256) // 서명
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -59,16 +62,21 @@ public class JwtTokenProvider {
         Date expiry = new Date(now.getTime() + refreshTokenValidity);
 
         return Jwts.builder()
-                .setIssuedAt(now)
-                .setExpiration(expiry)
-                .signWith(key, SignatureAlgorithm.HS256)
-                .compact();
+                .setIssuedAt(now) // 발급 시간
+                .setExpiration(expiry) // 만료 시간
+                .signWith(secretKey, SignatureAlgorithm.HS256) // 알고리즘으로 서명
+                .compact(); // 최종 JWT를 문자열로 반환
+    }
+    public String createAccessTokenFromRefreshToken(String refreshToken){
+        String email = getEmailFromToken(refreshToken);
+        String role = getRoleFromToken(refreshToken);
+        return createAccessToken(email, role);
     }
 
     // 토큰에서 사용자 이메일 추출
     public String getEmailFromToken(String token){
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -77,7 +85,7 @@ public class JwtTokenProvider {
     // 사용자 역할 추출
     public String getRoleFromToken(String token){
         return (String) Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -88,7 +96,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String token){
         try{
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(secretKey)
                     .build()
                     .parseClaimsJws(token);
                     return true;
@@ -101,6 +109,9 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             throw new JwtValidationException("JWT 클레임이 비어 있습니다.", e);
         }
+    }
+    public long getRefreshTokenValidity(){
+        return refreshTokenValidity;
     }
 
     // 인증 객체 반환 -> SecurityContext로 등록되는 생체 인증 정보
@@ -117,5 +128,23 @@ public class JwtTokenProvider {
                 userDetails.getAuthorities()
         );
 
+    }
+    // 앱(헤더)과 웹(cookie) 구분
+    public String resolveToken(HttpServletRequest request) {
+        // 앱
+        String bearer = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer ")){
+            return bearer.substring(7);
+        }
+
+        if (request.getCookies() != null){
+            for (Cookie cookie : request.getCookies()) {
+                if ("accessToken".equals(cookie.getName())){
+                    return cookie.getValue();
+                }
+
+            }
+        }
+        return null;
     }
 }

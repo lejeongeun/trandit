@@ -17,6 +17,7 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenService refreshTokenService;
 
 
     @Transactional
@@ -39,6 +40,7 @@ public class AuthService {
         memberRepository.save(member);
     }
 
+    @Transactional
     public TokenResponseDto login(LoginRequestDto request) {
         Member member = memberRepository.findByEmail(request.getEmail())
                 .orElseThrow(()-> new IllegalArgumentException("존재하지 않는 사용자입니다."));
@@ -50,6 +52,7 @@ public class AuthService {
         String accessToken = jwtTokenProvider.createAccessToken(member.getEmail(), member.getRole().name());
         String refreshToken = jwtTokenProvider.createRefreshToken();
 
+        refreshTokenService.save(member.getEmail(), refreshToken, jwtTokenProvider.getRefreshTokenValidity());
         return new TokenResponseDto(accessToken, refreshToken, member.getRole().name());
     }
 }
