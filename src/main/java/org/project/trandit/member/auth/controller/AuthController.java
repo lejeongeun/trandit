@@ -1,13 +1,13 @@
-package org.project.trandit.auth.controller;
+package org.project.trandit.member.auth.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.project.trandit.auth.dto.LoginRequestDto;
-import org.project.trandit.auth.dto.RefreshTokenRequestDto;
-import org.project.trandit.auth.dto.RegisterRequestDto;
-import org.project.trandit.auth.service.AuthService;
-import org.project.trandit.auth.service.RedisService;
+import org.project.trandit.member.auth.dto.LoginRequestDto;
+import org.project.trandit.member.auth.dto.RefreshTokenRequestDto;
+import org.project.trandit.member.auth.dto.RegisterRequestDto;
+import org.project.trandit.member.auth.service.AuthService;
+import org.project.trandit.member.auth.service.RedisService;
 import org.project.trandit.domain.member.Member;
 import org.project.trandit.global.exception.JwtValidationException;
 import org.project.trandit.security.CustomUserDetails;

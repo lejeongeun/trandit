@@ -1,11 +1,9 @@
-package org.project.trandit.auth.service;
+package org.project.trandit.member.auth.service;
 
 import lombok.RequiredArgsConstructor;
-import org.project.trandit.auth.dto.LoginRequestDto;
-import org.project.trandit.auth.dto.RegisterRequestDto;
+import org.project.trandit.member.auth.dto.RegisterRequestDto;
 import org.project.trandit.domain.member.Member;
 import org.project.trandit.domain.member.MemberRepository;
-import org.project.trandit.security.JwtTokenProvider;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

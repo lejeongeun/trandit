@@ -1,4 +1,4 @@
-package org.project.trandit.auth.service;
+package org.project.trandit.member.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
