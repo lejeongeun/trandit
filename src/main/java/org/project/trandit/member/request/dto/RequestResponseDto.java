@@ -1,0 +1,36 @@
+package org.project.trandit.member.request.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.project.trandit.domain.request.Request;
+import org.project.trandit.domain.request.VehicleType;
+
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RequestResponseDto {
+    private String departureAddress;
+    private String arrivalAddress;
+    private LocalDateTime departureTime;
+    private VehicleType vehicleType;
+    private boolean needForkLift;
+    private int workerCount;
+    private String status;
+
+    public static RequestResponseDto fromEntity(Request request) {
+        return RequestResponseDto.builder()
+                .departureAddress(request.getDepartureAddress())
+                .arrivalAddress(request.getArrivalAddress())
+                .departureTime(request.getDepartureTime())
+                .vehicleType(request.getVehicleType())
+                .needForkLift(request.isNeedForklift())
+                .workerCount(request.getWorkerCount())
+                .status(request.getStatus().name())
+                .build();
+    }
+}

@@ -1,10 +1,7 @@
 package org.project.trandit.domain.request;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.project.trandit.domain.common.BaseTimeEntity;
 import org.project.trandit.domain.match.Matching;
 import org.project.trandit.domain.member.Member;
@@ -16,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,6 +24,10 @@ public class Request extends BaseTimeEntity {
     private String departureAddress; //출발지
     private String arrivalAddress; // 도착지
     private LocalDateTime departureTime; // 요청 출발 일시
+
+
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 
     @Enumerated(EnumType.STRING)
     private VehicleType vehicleType; // 요청 차량 종류(1톤, 3톤, 5톤 트럭 등)
