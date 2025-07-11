@@ -1,4 +1,4 @@
-package org.project.trandit.domain.auth;
+package org.project.trandit.domain.monitoring;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

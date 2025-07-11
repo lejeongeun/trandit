@@ -5,6 +5,7 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import org.project.trandit.global.exception.JwtValidationException;
@@ -20,6 +21,7 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
+@Getter
 public class JwtTokenProvider {
 
     private final CustomUserDetailsService userDetailsService;
@@ -57,11 +59,12 @@ public class JwtTokenProvider {
     }
 
     // 리프레시 토큰 생성
-    public String createRefreshToken(){
+    public String createRefreshToken(String email){
         Date now = new Date();
         Date expiry = new Date(now.getTime() + refreshTokenValidity);
 
         return Jwts.builder()
+                .setSubject(email)
                 .setIssuedAt(now) // 발급 시간
                 .setExpiration(expiry) // 만료 시간
                 .signWith(secretKey, SignatureAlgorithm.HS256) // 알고리즘으로 서명
@@ -109,9 +112,6 @@ public class JwtTokenProvider {
         } catch (IllegalArgumentException e) {
             throw new JwtValidationException("JWT 클레임이 비어 있습니다.", e);
         }
-    }
-    public long getRefreshTokenValidity(){
-        return refreshTokenValidity;
     }
 
     // 인증 객체 반환 -> SecurityContext로 등록되는 생체 인증 정보

@@ -1,4 +1,4 @@
-package org.project.trandit.auth.dto;
+package org.project.trandit.member.auth.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

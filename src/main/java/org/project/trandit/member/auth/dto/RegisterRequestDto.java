@@ -1,4 +1,4 @@
-package org.project.trandit.auth.dto;
+package org.project.trandit.member.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,6 +21,6 @@ public class RegisterRequestDto {
     @NotBlank
     private String name;
     private String phone;
-    private Role role = Role.CUSTOMER;
+    private Role role;
 
 }
