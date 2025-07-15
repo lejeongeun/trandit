@@ -7,6 +7,7 @@ import org.project.trandit.domain.common.BaseTimeEntity;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -1,4 +1,4 @@
-package org.project.trandit.user.member.dto;
+package org.project.trandit.trucker.trucker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class TruckerProfileResponse {
+    private Long id;
     private String company_name;
     private String company_registrationNumber; // 사업자등록번호
     private String company_address; // 주소

@@ -19,11 +19,11 @@ public class AuthService {
         if (memberRepository.existsByEmail(request.getEmail())){
             throw new IllegalArgumentException("이미 사용중인 이메일 입니다.");
         }
+
         if (memberRepository.existsByPassword(request.getPassword())){
             throw new IllegalArgumentException("이미 사용중인 비밀번호입니다.");
         }
         String encoderPassword = passwordEncoder.encode(request.getPassword());
-
         Member member = Member.builder()
                 .email(request.getEmail())
                 .password(encoderPassword)

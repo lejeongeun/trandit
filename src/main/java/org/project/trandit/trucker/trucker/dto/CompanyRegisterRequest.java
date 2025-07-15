@@ -1,4 +1,4 @@
-package org.project.trandit.user.member.dto;
+package org.project.trandit.trucker.trucker.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberProfileResponseDto {
-    private Long id;
+public class CompanyRegisterRequest {
     private String name;
-    private String email;
+    private String registrationNumber;
+    private String address;
     private String phone;
-    private String role;
 }
