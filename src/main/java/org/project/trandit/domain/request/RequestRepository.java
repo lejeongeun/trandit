@@ -10,4 +10,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
     List<Request> findByRequester(Member requester);
 
     Optional<Request> findByRequesterAndId(Member requester, Long id);
+    List<Request> findAllByOrderByCreatedAtDesc();
 }
