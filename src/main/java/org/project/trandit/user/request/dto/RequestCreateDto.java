@@ -1,4 +1,4 @@
-package org.project.trandit.member.request.dto;
+package org.project.trandit.user.request.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +11,15 @@ import java.time.LocalDateTime;
 public class RequestCreateDto {
     private String departureAddress;
     private String arrivalAddress;
+
+    private Double departureLat;
+    private Double departureLng;
+    private Double arrivalLat;
+    private Double arrivalLng;
+
     private LocalDateTime departureTime;
     private VehicleType vehicleType;
     private boolean needForkLift;
     private int workerCount;
+
 }

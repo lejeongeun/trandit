@@ -3,6 +3,7 @@ package org.project.trandit.trucker.trucker.service;
 import lombok.RequiredArgsConstructor;
 import org.project.trandit.domain.member.*;
 import org.project.trandit.global.exception.NotFoundException;
+import org.project.trandit.global.util.AuthUtils;
 import org.project.trandit.trucker.trucker.dto.CompanyRegisterRequest;
 import org.project.trandit.trucker.trucker.dto.TruckerProfileResponse;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,6 +17,7 @@ public class TruckerService {
     private final CompanyRepository companyRepository;
     @Transactional(readOnly = true)
     public TruckerProfileResponse truckerDetails(Member member) {
+
         if (member.getRole() != Role.TRUCKER){
             throw new AccessDeniedException("화물주 전용 정보 입니다.");
         }

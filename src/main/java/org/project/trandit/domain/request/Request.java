@@ -21,10 +21,14 @@ public class Request extends BaseTimeEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDateTime departureTime; // 요청 출발 일시
     private String departureAddress; //출발지
     private String arrivalAddress; // 도착지
-    private LocalDateTime departureTime; // 요청 출발 일시
 
+    private Double departureLat;
+    private Double departureLng;
+    private Double arrivalLat;
+    private Double arrivalLng;
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;

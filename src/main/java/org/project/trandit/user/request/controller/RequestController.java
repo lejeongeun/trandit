@@ -1,10 +1,10 @@
-package org.project.trandit.member.request.controller;
+package org.project.trandit.user.request.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.project.trandit.member.request.dto.RequestCreateDto;
-import org.project.trandit.member.request.dto.RequestResponseDto;
-import org.project.trandit.member.request.service.RequestService;
+import org.project.trandit.user.request.dto.RequestCreateDto;
+import org.project.trandit.user.request.dto.RequestResponseDto;
+import org.project.trandit.user.request.service.RequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

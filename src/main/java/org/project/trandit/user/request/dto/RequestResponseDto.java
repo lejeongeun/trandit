@@ -1,4 +1,4 @@
-package org.project.trandit.member.request.dto;
+package org.project.trandit.user.request.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +17,12 @@ public class RequestResponseDto {
     private long id;
     private String departureAddress;
     private String arrivalAddress;
+
+    private Double departureLat;
+    private Double departureLng;
+    private Double arrivalLat;
+    private Double arrivalLng;
+
     private LocalDateTime departureTime;
     private VehicleType vehicleType;
     private boolean needForkLift;
@@ -28,6 +34,10 @@ public class RequestResponseDto {
                 .id(request.getId())
                 .departureAddress(request.getDepartureAddress())
                 .arrivalAddress(request.getArrivalAddress())
+                .departureLat(request.getDepartureLat())
+                .departureLng(request.getDepartureLng())
+                .arrivalLat(request.getArrivalLat())
+                .arrivalLng(request.getArrivalLng())
                 .departureTime(request.getDepartureTime())
                 .vehicleType(request.getVehicleType())
                 .needForkLift(request.isNeedForklift())
