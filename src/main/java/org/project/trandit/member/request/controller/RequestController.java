@@ -32,6 +32,12 @@ public class RequestController {
         return ResponseEntity.ok(res);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RequestResponseDto> getMyRequest(@PathVariable Long id) {
+        RequestResponseDto res = requestService.getMyRequest(id);
+        return ResponseEntity.ok(res);
+    }
+
     //요청 수정
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> update(@Valid @RequestBody RequestCreateDto requestCreateDto,

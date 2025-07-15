@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class RequestResponseDto {
+    private long id;
     private String departureAddress;
     private String arrivalAddress;
     private LocalDateTime departureTime;
@@ -24,6 +25,7 @@ public class RequestResponseDto {
 
     public static RequestResponseDto fromEntity(Request request) {
         return RequestResponseDto.builder()
+                .id(request.getId())
                 .departureAddress(request.getDepartureAddress())
                 .arrivalAddress(request.getArrivalAddress())
                 .departureTime(request.getDepartureTime())
