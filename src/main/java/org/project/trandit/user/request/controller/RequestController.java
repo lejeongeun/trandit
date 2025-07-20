@@ -17,7 +17,6 @@ import java.util.Map;
 public class RequestController {
     private final RequestService requestService;
 
-
     //운송요청 등록
     @PostMapping
     public ResponseEntity<Map<String, String>> request(@Valid @RequestBody RequestCreateDto requestCreate) {
