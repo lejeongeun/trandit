@@ -1,0 +1,31 @@
+/* SettlementList.css - 정산 리스트 테이블 기본 스타일 */
+
+.settlement-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.settlement-table th, .settlement-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.settlement-table th {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.settlement-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.settlement-table tr:hover {
+  background-color: #e3f2fd;
+}
+
+.settlement-status {
+  font-weight: bold;
+  color: #1976d2;
+} 

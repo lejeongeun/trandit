@@ -1,0 +1,101 @@
+/* TopBar.css */
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: #fff;
+    border-bottom: 1.5px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    z-index: 300;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  
+  .topbar-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* 왼쪽 패딩만 아주 작게, 오른쪽만 여유 */
+    padding-left: 20px;
+    padding-right: 32px;
+  }
+  
+  .topbar-left {
+    display: flex;
+    align-items: center;
+    /* 왼쪽에 완전 붙게! */
+    margin-left: 0;
+  }
+  
+  .topbar-logo {
+    font-size: 1.35em;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: #222;
+    margin-left: 0;
+    padding-left: 16px;  /* 필요하면 0px로 조절 가능 */
+    /* 마우스 오버 시 색상 부드럽게 */
+    transition: color 0.18s;
+  }
+  .topbar-logo span {
+    color: #2563eb;
+    transition: color 0.18s;
+  }
+  .topbar-logo:hover {
+    color: #2563eb;
+  }
+  .topbar-logo:hover span {
+    color: #111;
+  }
+  
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  
+  .topbar-admin {
+    font-weight: 500;
+    color: #2563eb;
+    font-size: 1.08em;
+  }
+  
+  .topbar-logout {
+    padding: 7px 16px;
+    border-radius: 5px;
+    border: 1.5px solid #2563eb;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.18s, color 0.18s, border 0.18s;
+  }
+  .topbar-logout:hover {
+    background: #1746a2;
+    border-color: #1746a2;
+  }
+  
+  /* 모바일 대응 */
+  @media (max-width: 600px) {
+    .topbar-content {
+      padding-right: 10px;
+    }
+    .topbar-logo {
+      font-size: 1em;
+      padding-left: 6px;
+    }
+    .topbar-admin {
+      font-size: 0.97em;
+    }
+    .topbar-logout {
+      padding: 5px 9px;
+      font-size: 0.97em;
+    }
+  }
+  

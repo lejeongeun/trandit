@@ -1,0 +1,50 @@
+/* CommonButton.css */
+.common-btn {
+  padding: 8px 14px;
+  border-radius: 4px;
+  border: 1.5px solid #2563eb;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.common-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.common-btn:hover:not(:disabled),
+.common-btn:focus:not(:disabled) {
+  background: #1746a2;
+  border-color: #1746a2;
+}
+.common-btn.secondary {
+  background: #fff;
+  color: #2563eb;
+  border: 1.5px solid #2563eb;
+}
+.common-btn.secondary:hover:not(:disabled),
+.common-btn.secondary:focus:not(:disabled) {
+  background: #eaf4ff;
+  color: #1746a2;
+  border-color: #1746a2;
+}
+.common-btn.danger {
+  background: #e53e3e;
+  color: #fff;
+  border: 1.5px solid #e53e3e;
+}
+.common-btn.danger:hover:not(:disabled),
+.common-btn.danger:focus:not(:disabled) {
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+.common-btn.sm {
+  padding: 5px 10px;
+  font-size: 0.95em;
+}
+.common-btn.lg {
+  padding: 12px 22px;
+  font-size: 1.15em;
+} 

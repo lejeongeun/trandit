@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import RequestList from './pages/RequestList';
+import UserList from './pages/UserList';
+import SettlementList from './pages/SettlementList';
+import Sidebar from './components/Sidebar';
+import TopBar from './components/TopBar';
+import Login from './pages/Login';
+
+function PrivateRoute({ children }) {
+  const token = localStorage.getItem('token');
+  const location = useLocation();
+  return token ? children : <Navigate to="/login" state={{ from: location }} replace />;
+}
+
+function Layout({ children }) {
+  return (
+    <>
+      <TopBar />
+      <Sidebar />
+      <div className="main-content" style={{ paddingTop: 56 }}>{children}</div>
+    </>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route
+          path="/*"
+          element={
+            <PrivateRoute>
+              <Layout>
+                <Routes>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/requests" element={<RequestList />} />
+                  <Route path="/users" element={<UserList />} />
+                  <Route path="/settlement" element={<SettlementList />} />
+                </Routes>
+              </Layout>
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

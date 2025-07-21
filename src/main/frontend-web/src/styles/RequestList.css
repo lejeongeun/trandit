@@ -1,0 +1,317 @@
+/* RequestList.css */
+.request-list-container {
+    padding: 20px;
+}
+
+.request-list-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.request-list-container th,
+.request-list-container td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.request-list-container th {
+    background-color: #f2f2f2;
+}
+
+.request-list-container tbody tr {
+    cursor: pointer;
+}
+
+.request-list-container tbody tr.selected {
+    background: #f0f8ff;
+}
+
+.request-details {
+    margin-top: 24px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+}
+
+.request-details div {
+    margin-top: 10px;
+}
+
+.request-details button {
+    margin-right: 8px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.request-details button:hover {
+    background-color: #0056b3;
+}
+
+/* 필터 버튼 그룹 스타일 */
+.filter-buttons {
+    margin-bottom: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.filter-buttons button {
+    padding: 8px 16px;
+    border: 1px solid #007bff;
+    background: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s;
+}
+
+.filter-buttons button.active,
+.filter-buttons button:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-content {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    padding: 32px 24px 24px 24px;
+    min-width: 320px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #888;
+    cursor: pointer;
+    z-index: 1;
+    transition: color 0.2s;
+}
+.modal-close:hover {
+    color: #007bff;
+}
+
+/* 테이블 스타일 개선 */
+.request-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+}
+.request-table th, .request-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+}
+.request-table th {
+    background: #f7faff;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e0e7ef;
+}
+.request-table tbody tr {
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.request-table tbody tr:hover {
+    background: #f5faff;
+}
+.request-table tbody tr.selected {
+    background: #e6f0ff;
+}
+.request-table td {
+    color: #444;
+}
+
+/* 네비게이션 메뉴 스타일 */
+.nav-menu {
+    display: flex;
+    gap: 20px;
+    background: #f7faff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    align-items: center;
+}
+.nav-menu a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.08rem;
+    padding: 6px 14px;
+    border-radius: 4px;
+    transition: background 0.18s, color 0.18s;
+}
+.nav-menu a.active,
+.nav-menu a:hover {
+    background: #007bff;
+    color: #fff;
+}
+
+/* 검색/정렬 바 스타일 */
+.search-sort-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    align-items: center;
+}
+.search-sort-bar input[type="text"] {
+    padding: 8px 12px;
+    border: 1px solid #c0d3ea;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 220px;
+    transition: border 0.18s;
+}
+.search-sort-bar input[type="text"]:focus {
+    border: 1.5px solid #007bff;
+    outline: none;
+}
+.search-sort-bar select {
+    padding: 8px 10px;
+    border: 1px solid #c0d3ea;
+    border-radius: 4px;
+    font-size: 1rem;
+    background: #f7faff;
+}
+.search-sort-bar button {
+    padding: 8px 12px;
+    border: none;
+    background: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.search-sort-bar button:hover {
+    background: #0056b3;
+}
+
+/* 유형(요청/제안/매칭) 탭 스타일 */
+.type-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.type-tabs button {
+    padding: 8px 18px;
+    border: 1px solid #007bff;
+    background: white;
+    color: #007bff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background 0.18s, color 0.18s;
+}
+.type-tabs button.active,
+.type-tabs button:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Toast 알림 스타일 */
+.toast {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: #222;
+    color: #fff;
+    padding: 16px 28px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+    z-index: 2000;
+    opacity: 0.95;
+    animation: toast-in 0.2s;
+}
+@keyframes toast-in {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 0.95; }
+}
+
+/* 페이지네이션 버튼 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0;
+}
+.pagination button {
+  padding: 7px 15px;
+  border: 1.5px solid #2563eb;
+  background: #fff;
+  color: #2563eb;
+  border-radius: 5px;
+  font-size: 1.05em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+}
+.pagination button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.pagination button.active,
+.pagination button:not([disabled]):hover {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+/* 메인 컨텐츠가 사이드바에 가리지 않도록 padding-left 적용 필요 */
+.dashboard-container,
+.request-list-container,
+.user-list-container {
+    padding-left: 260px;
+    padding-top: 16px;
+}
+
+/* Main content background for all pages */
+.main-content {
+  background: #f8f9fb;
+  min-height: 100vh;
+}
+
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 100;
+    border-left: 1.5px solid #e5e7eb;
+}
